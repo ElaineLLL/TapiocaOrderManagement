@@ -61,7 +61,7 @@ schools_resource = SchoolsResource(config={"students_resource": students_resourc
 
 @app.get("/")
 async def root():
-    return 'Hello, from Docker! I am Tapioca Order Management Service.'
+    return 'Hello, from EC2! I am Tapioca Order Management Service.'
     # return RedirectResponse("/static/index.html")
 
 
