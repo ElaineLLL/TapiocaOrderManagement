@@ -18,8 +18,7 @@ class SchoolsResource(BaseResource):
 
         self.schools = []
 
-        self.schools.append(SchoolRspModel(school_code="CC",
-                                           school_name="Columbia College"))
+        self.schools.append(SchoolRspModel(school_code="CC", school_name="Columbia College"))
         self.schools.append(SchoolRspModel(school_code="SEAS", school_name="School of Engineering and Applied Sciences"))
         self.schools.append(SchoolRspModel(school_code="BN", school_name="Barnard College"))
         self.schools.append(SchoolRspModel(school_code="GSAS", school_name="Graduate School of Arts and Sciences"))
