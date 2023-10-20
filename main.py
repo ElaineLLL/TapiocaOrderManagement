@@ -32,7 +32,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def get_data_service():
 
     config = {
-        "data_directory": "~/TapiocaOrderManagement/data",
+        "data_directory": "/home/ec2-user/TapiocaOrderManagement/data",
         "data_file": "students.json"
     }
 
