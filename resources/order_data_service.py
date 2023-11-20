@@ -50,7 +50,7 @@ class OrderDataService(BaseDataService):
         :return: A list of matching JSON records.
         """
         result = []
-        oid = int(OrderID)
+        oid = -1 if OrderID == None else int(OrderID)
         for s in self.orders.values():
             if OrderID is None or (s.get("OrderID",None) == oid):
                 result.append(s)
