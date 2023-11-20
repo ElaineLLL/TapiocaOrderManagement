@@ -82,6 +82,18 @@ async def get_orders(OrderID: str = None):
     result = orders_resource.get_orders(OrderID)
     return result
 
+@app.get("/orders/{OrderID}", response_model=OrderModel)
+async def get_orders(OrderID:str):
+    """
+    Return a list of students matching a query string.
+
+    - **uni**: student's UNI
+    - **last_name**: student's last name
+    - **school_code**: student's school.
+    """
+    result = orders_resource.get_orders(OrderID)
+    return result
+
 @app.post("/orders", response_model=OrderModel)
 async def post_orders(item: OrderModel):
     orders_resource.post_orders(item)
