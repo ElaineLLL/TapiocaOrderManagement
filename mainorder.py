@@ -82,7 +82,7 @@ async def get_orders(OrderID: str = None):
     result = orders_resource.get_orders(OrderID)
     return result
 
-@app.get("/orders/{OrderID}", response_model=OrderModel)
+@app.get("/orders/{OrderID}", response_model=List[OrderRspModel])
 async def get_orders(OrderID:str):
     """
     Return a list of students matching a query string.
