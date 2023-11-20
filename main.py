@@ -32,7 +32,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def get_data_service():
 
     config = {
-        "data_directory": "/home/ec2-user/TapiocaOrderManagement/data",
+        "data_directory": "./data",
         "data_file": "students.json"
     }
 
@@ -65,17 +65,22 @@ async def root():
     # return RedirectResponse("/static/index.html")
 
 
-# @app.get("/students", response_model=List[StudentRspModel])
-# async def get_students(uni: str = None, last_name: str = None, school_code: str = None):
-#     """
-#     Return a list of students matching a query string.
+@app.get("/students", response_model=List[StudentRspModel])
+async def get_students(uni: str = None, last_name: str = None, school_code: str = None, first_name: str = None):
+    """
+    Return a list of students matching a query string.
 
-#     - **uni**: student's UNI
-#     - **last_name**: student's last name
-#     - **school_code**: student's school.
-#     """
-#     result = students_resource.get_students(uni, last_name, school_code)
-#     return result
+    - **uni**: student's UNI
+    - **last_name**: student's last name
+    - **school_code**: student's school.
+    """
+    result = students_resource.get_students(uni, last_name, school_code, first_name)
+    return result
+
+@app.post("/s")
+async def postdate(item: StudentModel):
+    # res = students_resource.get_students(uni, last_name, school_code, first_name, email)
+    return item
 
 
 # @app.get("/students/{uni}", response_model=Union[StudentRspModel, None])
@@ -91,7 +96,6 @@ async def root():
 #         result = result[0]
 #     else:
 #         raise HTTPException(status_code=404, detail="Not found")
-
 #     return result
 
 
@@ -116,4 +120,4 @@ async def root():
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8011)
+    uvicorn.run(app, host="0.0.0.0", port=8012)
