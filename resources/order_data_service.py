@@ -3,6 +3,7 @@ from resources.order_models import OrderModel,OrderRspModel
 import json
 import pymysql
 from datetime import datetime
+from utils import *
 
 
 class OrderDataService(BaseDataService):
@@ -51,10 +52,30 @@ class OrderDataService(BaseDataService):
         """
         result = []
         oid = -1 if OrderID == None else int(OrderID)
-        for s in self.orders.values():
-            if OrderID is None or (s.get("OrderID",None) == oid):
-                result.append(s)
-
+        db = pymysql.connect(host = "database-1.caogqwqgw2no.us-east-1.rds.amazonaws.com", 
+                    port = 3306,
+                    user = "admin", 
+                    passwd = "Stargod08122", 
+                    db = "Tapioca"
+                    )
+        cursor = db.cursor()
+        if oid == -1:
+            sql = f"SELECT * FROM Orderr"
+        else:
+            sql = f"SELECT * FROM Orderr WHERE OrderID={oid}"
+        print(sql)
+        try:
+            cursor.execute(sql)
+            for l in cursor.fetchall():
+                seg = {}
+                oid,cid,sid,ct,tp,s = l
+                seg["OrderID"],seg["CustomerID"],seg['StaffID'],seg["OrderTime"],seg['TotalPrice'],seg['Status'] = oid,cid,sid,str(ct),tp,s
+                result.append(seg)
+            print('Success')
+        except:
+            db.rollback()
+            print('Error')
+        db.close()
         return result
     
     def post_orders(self, item: OrderModel):
@@ -65,7 +86,9 @@ class OrderDataService(BaseDataService):
                     db = "Tapioca"
                     )
         ditem = dict(item)
-        oid,cid,sid,tp,s = ditem['OrderID'],ditem['CustomerID'],ditem['StaffID'],ditem['TotalPrice'],ditem['Status']
+        oid = Readdata("OrderID")
+        Changedata("OrderID",oid+1)
+        cid,sid,tp,s = ditem['CustomerID'],ditem['StaffID'],ditem['TotalPrice'],ditem['Status']
         ot = str(datetime.now().replace(microsecond=0))
         cursor = db.cursor()
         sql = f"INSERT INTO Orderr (OrderID,CustomerID,StaffID,OrderTime,TotalPrice,Status) VALUES ({oid},{cid},{sid},str_to_date('{ot}','%Y-%m-%d %H:%i:%s'),{tp},'{s}')"
@@ -94,7 +117,7 @@ class OrderDataService(BaseDataService):
                     db = "Tapioca"
                     )
         ditem = dict(item)
-        oid,tp,s = ditem['OrderID'],ditem['TotalPrice'],ditem['Status']
+        oid,tp,s = int(OrderID),ditem['TotalPrice'],ditem['Status']
         cursor = db.cursor()
         sql = f"UPDATE Orderr Set TotalPrice={tp},Status='{s}' where OrderID={oid};"
         print(sql)
@@ -112,9 +135,9 @@ class OrderDataService(BaseDataService):
     
     def delete_orders(self, OrderID: str):
         oid = int(OrderID)
-        # if oid not in self.orders:
-        #     print("Error!")
-        #     return
+        if oid not in self.orders:
+            print("Error!")
+            return
         db = pymysql.connect(host = "database-1.caogqwqgw2no.us-east-1.rds.amazonaws.com", 
                     port = 3306,
                     user = "admin", 

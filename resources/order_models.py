@@ -6,12 +6,12 @@ from resources.rest_models import Link
 
 
 class OrderModel(BaseModel):
-    OrderID: int
-    CustomerID: int
-    StaffID: int
-    OrderTime: str
-    TotalPrice: float
-    Status: str
+    OrderID: int = 0
+    CustomerID: int = 0
+    StaffID: int = 0
+    OrderTime: str = ''
+    TotalPrice: float = 0.0
+    Status: str = ''
 
     # model_config = {
     #     "json_schema_extra": {
